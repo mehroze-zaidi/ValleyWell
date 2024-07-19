@@ -1,0 +1,4 @@
+enum DeviceMode {
+  simulator,
+  realDevice,
+}
