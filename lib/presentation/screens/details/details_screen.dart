@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:valley_well/data/models/valley_well_model.dart';
 import 'package:valley_well/presentation/screens/details/cubit/details_screen_cubit.dart';
+import 'package:valley_well/presentation/widgets/custom_error_widget.dart';
 import 'package:valley_well/utils/constants/app_colors.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -46,6 +47,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
     return lines.join('\n');
   }
 
+  String removeSymbols(String text) {
+    return text.replaceAll(RegExp(r'[|#*]'), '');
+  }
+
   TextSpan formatText(String text, bool isDarkMode) {
     text = cleanText(text);
 
@@ -59,7 +64,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
       spans.add(
         TextSpan(
-          text: '$firstLine\n',
+          text: '${removeSymbols(firstLine)}\n',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -75,7 +80,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       if (line.startsWith('##')) {
         spans.add(
           TextSpan(
-            text: '${line.substring(2).trim()}\n',
+            text: '${removeSymbols(line.substring(2).trim())}\n',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -86,7 +91,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       } else if (line.startsWith('**') && line.endsWith('**')) {
         spans.add(
           TextSpan(
-            text: '\n\n${line.substring(2, line.length - 2)}\n',
+            text: '\n\n${removeSymbols(line.substring(2, line.length - 2))}\n',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontStyle: FontStyle.italic,
@@ -97,7 +102,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       } else if (line.startsWith('* **') && line.endsWith('**')) {
         spans.add(
           TextSpan(
-            text: '${line.substring(3, line.length - 2)}\n',
+            text: '${removeSymbols(line.substring(3, line.length - 2))}\n',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: isDarkMode ? AppColors.darkText : AppColors.lightText,
@@ -107,7 +112,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       } else if (line.startsWith('* **')) {
         spans.add(
           TextSpan(
-            text: '${line.substring(3)}\n',
+            text: '${removeSymbols(line.substring(3))}\n',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: isDarkMode ? AppColors.darkText : AppColors.lightText,
@@ -117,7 +122,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       } else if (line.startsWith('* ')) {
         spans.add(
           TextSpan(
-            text: '${line.substring(2)}\n',
+            text: '${removeSymbols(line.substring(2))}\n',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: isDarkMode ? AppColors.darkText : AppColors.lightText,
@@ -130,7 +135,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           if (i % 2 == 1) {
             spans.add(
               TextSpan(
-                text: parts[i],
+                text: removeSymbols(parts[i]),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: isDarkMode ? AppColors.darkText : AppColors.lightText,
@@ -140,7 +145,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           } else {
             spans.add(
               TextSpan(
-                text: parts[i],
+                text: removeSymbols(parts[i]),
                 style: TextStyle(
                   color: isDarkMode ? AppColors.darkText : AppColors.lightText,
                 ),
@@ -152,7 +157,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       } else {
         spans.add(
           TextSpan(
-            text: '$line\n',
+            text: '${removeSymbols(line)}\n',
             style: TextStyle(
               color: isDarkMode ? AppColors.darkText : AppColors.lightText,
             ),
@@ -215,13 +220,52 @@ class _DetailsScreenState extends State<DetailsScreen> {
               ),
             );
           }
+          if (state is DetailsScreenGetQuestionAnswerConnectionError) {
+            return CustomErrorWidget(
+              isDarkMode: isDarkMode,
+              onRetry: () => context.read<DetailsScreenCubit>().handleValleyWellQuestions(
+                    widget.index,
+                    widget.valleyWellModel,
+                  ),
+            );
+          }
           if (state is DetailsScreenGetQuestionAnswerError) {
             return Center(
-              child: Text(
-                state.errorMessage,
-                style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
-                      color: isDarkMode ? AppColors.darkText : AppColors.lightText,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    state.errorMessage,
+                    style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+                          color: isDarkMode ? AppColors.darkText : AppColors.lightText,
+                        ),
+                  ),
+                  GestureDetector(
+                    onTap: () => context.read<DetailsScreenCubit>().handleValleyWellQuestions(
+                          widget.index,
+                          widget.valleyWellModel,
+                        ),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 6,
+                        horizontal: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryColor,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        "Try again",
+                        style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+                              color: AppColors.darkText,
+                              fontSize: 12,
+                            ),
+                      ),
                     ),
+                  ),
+                ],
               ),
             );
           }

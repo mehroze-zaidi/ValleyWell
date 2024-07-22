@@ -16,7 +16,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
   void getValleyWellQuestions() async {
     emit(HomeScreenGetQuestionsLoading());
     try {
-      valleyWellRepository.getValleyWellQuestions();
+      await valleyWellRepository.getValleyWellQuestions();
       emit(HomeScreenGetQuestionsSuccess());
     } catch (e) {
       emit(

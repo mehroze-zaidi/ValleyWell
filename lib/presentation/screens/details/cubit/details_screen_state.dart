@@ -20,3 +20,9 @@ final class DetailsScreenGetQuestionAnswerError extends DetailsScreenState {
 
   DetailsScreenGetQuestionAnswerError(this.errorMessage);
 }
+
+final class DetailsScreenGetQuestionAnswerConnectionError extends DetailsScreenState {
+  final String errorMessage;
+
+  DetailsScreenGetQuestionAnswerConnectionError(this.errorMessage);
+}

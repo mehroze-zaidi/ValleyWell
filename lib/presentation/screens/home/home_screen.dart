@@ -10,14 +10,14 @@ import 'package:valley_well/utils/common/app_utils.dart';
 import 'package:valley_well/utils/constants/app_colors.dart';
 import 'package:valley_well/utils/constants/app_strings.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
+  String removeSymbols(
+    String text,
+  ) =>
+      text.replaceAll(RegExp(r'[|#*\n]'), '');
 
-class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final brightness = MediaQuery.of(context).platformBrightness;
@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             if (valleyWellModel.questionAnswer != null) ...[
                               const SizedBox(height: 5),
                               Text(
-                                valleyWellModel.questionAnswer!,
+                                removeSymbols(valleyWellModel.questionAnswer!),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(

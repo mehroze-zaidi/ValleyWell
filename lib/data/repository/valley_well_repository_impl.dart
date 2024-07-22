@@ -36,9 +36,8 @@ class ValleyWellRepositoryImpl implements ValleyWellRepository {
     int index,
     ValleyWellModel valleyWellModel,
   ) async {
-    String inst="Don't add any special character except start (*) ";
     final ResponseModel<String> responseModel = await geminiApiService.callGeminiApi(
-      valleyWellModel.question + inst,
+      valleyWellModel.question,
     );
     if (responseModel.responseStatus == ResponseStatus.success) {
       ValleyWellModel valleyWellModelWithAnswer = valleyWellModel.copyWith(

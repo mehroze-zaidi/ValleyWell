@@ -35,13 +35,13 @@ class DetailsScreenCubit extends Cubit<DetailsScreenState> {
         );
       } else if (responseModel.responseStatus == ResponseStatus.failedToConnectToServer) {
         emit(
-          DetailsScreenGetQuestionAnswerError(
+          DetailsScreenGetQuestionAnswerConnectionError(
             AppStrings.failedToConnectToServer,
           ),
         );
       } else if (responseModel.responseStatus == ResponseStatus.noInternetConnection) {
         emit(
-          DetailsScreenGetQuestionAnswerError(
+          DetailsScreenGetQuestionAnswerConnectionError(
             AppStrings.noInternetConnection,
           ),
         );

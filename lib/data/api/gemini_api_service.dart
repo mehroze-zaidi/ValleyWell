@@ -19,7 +19,7 @@ class GeminiApiService {
       final response = await generativeModel.generateContent(
         [
           Content.text(
-            question,
+            "Answer the following question about health insurance policies in a factual manner. Avoid using conversational language and personal anecdotes: $question.",
           ),
         ],
       );
