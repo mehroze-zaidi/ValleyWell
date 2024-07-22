@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:valley_well/data/models/valley_well_model.dart';
 import 'package:valley_well/presentation/screens/details/details_screen.dart';
 import 'package:valley_well/presentation/screens/home/home_screen.dart';
 import 'package:valley_well/presentation/widgets/responsive_layout.dart';
@@ -24,14 +25,42 @@ class ValleyWellApp extends StatelessWidget {
               ),
           useMaterial3: true,
         ),
-        home: const ResponsiveLayout(
-          tiny: AppConstants.developMode == DevelopMode.release ? HomeScreen() : DetailsScreen(),
-          phone: AppConstants.developMode == DevelopMode.release ? HomeScreen() : DetailsScreen(),
-          tablet: AppConstants.developMode == DevelopMode.release ? HomeScreen() : DetailsScreen(),
-          largeTablet:
-              AppConstants.developMode == DevelopMode.release ? HomeScreen() : DetailsScreen(),
-          computer:
-              AppConstants.developMode == DevelopMode.release ? HomeScreen() : DetailsScreen(),
+        home: ResponsiveLayout(
+          tiny: AppConstants.developMode == DevelopMode.release
+              ? const HomeScreen()
+              : DetailsScreen(
+                  valleyWellModel: ValleyWellModel(
+                    question: "What is a premium in the context of health insurance?",
+                  ),
+                ),
+          phone: AppConstants.developMode == DevelopMode.release
+              ? const HomeScreen()
+              : DetailsScreen(
+                  valleyWellModel: ValleyWellModel(
+                    question: "What is a premium in the context of health insurance?",
+                  ),
+                ),
+          tablet: AppConstants.developMode == DevelopMode.release
+              ? const HomeScreen()
+              : DetailsScreen(
+                  valleyWellModel: ValleyWellModel(
+                    question: "What is a premium in the context of health insurance?",
+                  ),
+                ),
+          largeTablet: AppConstants.developMode == DevelopMode.release
+              ? const HomeScreen()
+              : DetailsScreen(
+                  valleyWellModel: ValleyWellModel(
+                    question: "What is a premium in the context of health insurance?",
+                  ),
+                ),
+          computer: AppConstants.developMode == DevelopMode.release
+              ? const HomeScreen()
+              : DetailsScreen(
+                  valleyWellModel: ValleyWellModel(
+                    question: "What is a premium in the context of health insurance?",
+                  ),
+                ),
         ),
       );
 }

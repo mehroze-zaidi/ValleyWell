@@ -14,6 +14,13 @@ class AppColors {
   static const greyShadowColor = Color(0xffb7b7b7);
   static const disabledColor = Color(0xffcecdcd);
   static const white = Color(0xFFFFFFFF);
+  static const white80 = Color(0xCCFFFFFF);
+  static const white70 = Color(0xB3FFFFFF);
+  static const white60 = Color(0xFFFFFFFF);
+  static const white50 = Color(0x80FFFFFF);
+  static const white40 = Color(0x66FFFFFF);
+  static const white30 = Color(0x4DFFFFFF);
+  static const white20 = Color(0x33FFFFFF);
   static const backgroundColor = Color(0xFFFFFFFF);
   static const black = Color(0xFF000000);
   static const black80 = Color(0xCC000000);
@@ -27,4 +34,20 @@ class AppColors {
   static const dividerColor = Color(0xFFA6A6A6);
   static const successColor = Color(0xFF8DC25D);
   static const transparent = Colors.transparent;
+
+  // Light theme colors
+  static const lightBackground = Color(0xFFF7F7F7);
+  static const lightText = Color(0xFF000000);
+  static const lightAnswerText = black40;
+  static const lightCard = Color(0xFFFFFFFF);
+  static const lightIcon = Color(0xFF000000);
+  static const lightShadow = Color(0xFFE0E0E0);
+
+  // Dark theme colors
+  static const darkBackground = Color(0xFF000000);
+  static const darkText = Color(0xFFFFFFFF);
+  static const darkAnswerText = white40;
+  static const darkCard = Color(0xFF1C1C1E);
+  static const darkIcon = Color(0xFFFFFFFF);
+  static const darkShadow = white20;
 }
