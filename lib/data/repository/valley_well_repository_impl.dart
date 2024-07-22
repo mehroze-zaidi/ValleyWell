@@ -18,17 +18,17 @@ class ValleyWellRepositoryImpl implements ValleyWellRepository {
   @override
   Future<List<ValleyWellModel>> getValleyWellQuestions() async {
     List<ValleyWellModel> valleyWellModelList = await valleyWellDatabase.getAllValleyWellModel();
-    if (valleyWellModelList.isNotEmpty) {
-      AppUtils.instance.questionAnswerModelList = valleyWellModelList;
-      return AppUtils.instance.questionAnswerModelList;
-    } else {
+
+    if (valleyWellModelList.isEmpty) {
       for (var valleyWellModel in AppUtils.instance.questionAnswerModelList) {
         await valleyWellDatabase.saveValleyWellModel(
           valleyWellModel: valleyWellModel,
         );
       }
-      return AppUtils.instance.questionAnswerModelList;
+      valleyWellModelList = await valleyWellDatabase.getAllValleyWellModel();
     }
+    AppUtils.instance.questionAnswerModelList = valleyWellModelList;
+    return AppUtils.instance.questionAnswerModelList;
   }
 
   @override
@@ -36,18 +36,21 @@ class ValleyWellRepositoryImpl implements ValleyWellRepository {
     int index,
     ValleyWellModel valleyWellModel,
   ) async {
+    String inst="Don't add any special character except start (*) ";
     final ResponseModel<String> responseModel = await geminiApiService.callGeminiApi(
-      valleyWellModel.question,
+      valleyWellModel.question + inst,
     );
     if (responseModel.responseStatus == ResponseStatus.success) {
       ValleyWellModel valleyWellModelWithAnswer = valleyWellModel.copyWith(
         questionAnswer: responseModel.response,
       );
-      await valleyWellDatabase.saveValleyWellModel(
-        index: index.toString(),
-        valleyWellModel: valleyWellModelWithAnswer,
-      );
       AppUtils.instance.questionAnswerModelList[index] = valleyWellModelWithAnswer;
+      await valleyWellDatabase.deleteAllValleyWellModel();
+      for (var valleyWellModel in AppUtils.instance.questionAnswerModelList) {
+        await valleyWellDatabase.saveValleyWellModel(
+          valleyWellModel: valleyWellModel,
+        );
+      }
     }
     return responseModel;
   }

@@ -12,19 +12,8 @@ class ValleyWellDatabase {
       await isar.valleyWellModels.where().findAll();
 
   Future<void> saveValleyWellModel({
-    String? index,
     required ValleyWellModel valleyWellModel,
-  }) async {
-    if (index != null) {
-      await isar.writeTxn(
-        () async {
-          await isar.valleyWellModels.putByIndex(
-            index,
-            valleyWellModel,
-          );
-        },
-      );
-    } else {
+  }) async =>
       await isar.writeTxn(
         () async {
           await isar.valleyWellModels.put(
@@ -32,8 +21,6 @@ class ValleyWellDatabase {
           );
         },
       );
-    }
-  }
 
   Future<void> deleteValleyWellModel(
     ValleyWellModel valleyWellModel,

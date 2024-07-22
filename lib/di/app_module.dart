@@ -7,10 +7,8 @@ import 'package:isar/isar.dart';
 import 'package:valley_well/data/api/gemini_api_service.dart';
 import 'package:valley_well/data/database/valley_well_database.dart';
 import 'package:valley_well/data/models/valley_well_model.dart';
-
+import 'package:valley_well/data/repository/valley_well_repository_impl.dart';
 import 'package:valley_well/domain/repository/valley_well_repository.dart';
-
-import '../data/repository/gemini_repository_impl.dart';
 
 Future<void> setupDependencies(Directory directory) async {
   final apiKey = dotenv.env['GEMINI_API_KEY'];

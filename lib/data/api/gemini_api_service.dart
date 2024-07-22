@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:valley_well/data/models/response_model.dart';
 import 'package:valley_well/utils/enums/response_status.dart';
@@ -42,6 +43,7 @@ class GeminiApiService {
         responseStatus: ResponseStatus.failedToConnectToServer,
       );
     } catch (e) {
+      debugPrint(e.toString());
       return ResponseModel(
         responseStatus: ResponseStatus.unknownError,
       );
