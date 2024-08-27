@@ -23,6 +23,7 @@ Future<void> setupDependencies(Directory directory) async {
   final generativeModel = GenerativeModel(
     model: 'gemini-1.5-flash',
     apiKey: apiKey.toString(),
+
   );
 
   GetIt.I.registerLazySingleton<Isar>(

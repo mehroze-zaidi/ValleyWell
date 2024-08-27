@@ -8,4 +8,10 @@ abstract class ValleyWellRepository {
     int index,
     ValleyWellModel valleyWellModel,
   );
+
+
+  Future<ResponseModel<String>> getValleyWellCustomAnswer(
+      ValleyWellModel valleyWellModel,
+
+      );
 }

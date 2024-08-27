@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:valley_well/data/models/valley_well_model.dart';
 import 'package:valley_well/domain/repository/valley_well_repository.dart';
+import 'package:valley_well/presentation/screens/custom_question/custom_question.dart';
 import 'package:valley_well/presentation/screens/details/cubit/details_screen_cubit.dart';
 import 'package:valley_well/presentation/screens/details/details_screen.dart';
 import 'package:valley_well/presentation/screens/home/cubit/home_screen_cubit.dart';
@@ -28,9 +31,12 @@ class HomeScreen extends StatelessWidget {
         GetIt.I.get<ValleyWellRepository>(),
       ),
       child: CupertinoPageScaffold(
-        backgroundColor: isDarkMode ? AppColors.darkBackground : AppColors.lightBackground,
+        backgroundColor:
+            isDarkMode ? AppColors.darkBackground : AppColors.lightBackground,
         navigationBar: CupertinoNavigationBar(
-          backgroundColor: isDarkMode ? AppColors.darkBackground : AppColors.lightBackground,
+          padding: const EdgeInsetsDirectional.symmetric(horizontal: 5),
+          backgroundColor:
+              isDarkMode ? AppColors.darkBackground : AppColors.lightBackground,
           border: Border(
             bottom: BorderSide(
               color: isDarkMode ? AppColors.white30 : AppColors.black20,
@@ -42,6 +48,43 @@ class HomeScreen extends StatelessWidget {
             style: TextStyle(
               color: isDarkMode ? AppColors.darkText : AppColors.lightText,
             ),
+          ),
+          trailing: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Material(
+                child: InkWell(onTap: () {
+
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (context) => BlocProvider(
+                        create: (context) => DetailsScreenCubit(
+                          GetIt.I.get<ValleyWellRepository>(),
+                        ),
+                        child: const CustomQuestionScreen(),
+                      ),
+                    ),
+                  );
+                },child: const Icon(FontAwesomeIcons.circleQuestion,size: 20,)),
+              ),
+              // IconButton4
+              //   iconSize: 14,
+              //     visualDensity: VisualDensity(vertical: -4),
+              //     onPressed: () {
+              //
+              //     },
+              //     icon: ),
+
+
+              Text(
+                "Got Question",
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: AppColors.black,
+                  fontSize: 10
+                    ),
+              ),
+            ],
           ),
         ),
         child: BlocBuilder<HomeScreenCubit, HomeScreenState>(
@@ -81,7 +124,8 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                       ).then(
-                        (value) => context.read<HomeScreenCubit>().updateQuestions(),
+                        (value) =>
+                            context.read<HomeScreenCubit>().updateQuestions(),
                       );
                     },
                     child: DecoratedBox(
@@ -89,12 +133,16 @@ class HomeScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12.0),
                         boxShadow: [
                           BoxShadow(
-                            color: isDarkMode ? AppColors.darkShadow : AppColors.lightShadow,
+                            color: isDarkMode
+                                ? AppColors.darkShadow
+                                : AppColors.lightShadow,
                             blurRadius: 10.0,
                             offset: const Offset(0, 5),
                           ),
                         ],
-                        color: isDarkMode ? AppColors.darkCard : AppColors.lightCard,
+                        color: isDarkMode
+                            ? AppColors.darkCard
+                            : AppColors.lightCard,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -108,9 +156,13 @@ class HomeScreen extends StatelessWidget {
                                   flex: 10,
                                   child: Text(
                                     valleyWellModel.question,
-                                    style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
-                                          color:
-                                              isDarkMode ? AppColors.darkText : AppColors.lightText,
+                                    style: CupertinoTheme.of(context)
+                                        .textTheme
+                                        .textStyle
+                                        .copyWith(
+                                          color: isDarkMode
+                                              ? AppColors.darkText
+                                              : AppColors.lightText,
                                           fontSize: 16,
                                         ),
                                   ),
@@ -128,7 +180,10 @@ class HomeScreen extends StatelessWidget {
                                 removeSymbols(valleyWellModel.questionAnswer!),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+                                style: CupertinoTheme.of(context)
+                                    .textTheme
+                                    .textStyle
+                                    .copyWith(
                                       color: isDarkMode
                                           ? AppColors.darkAnswerText
                                           : AppColors.lightAnswerText,

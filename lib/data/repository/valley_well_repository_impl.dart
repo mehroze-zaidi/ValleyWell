@@ -3,6 +3,7 @@ import 'package:valley_well/data/database/valley_well_database.dart';
 import 'package:valley_well/data/models/response_model.dart';
 import 'package:valley_well/data/models/valley_well_model.dart';
 import 'package:valley_well/domain/repository/valley_well_repository.dart';
+import 'package:valley_well/presentation/app/valley_well_app.dart';
 import 'package:valley_well/utils/common/app_utils.dart';
 import 'package:valley_well/utils/enums/response_status.dart';
 
@@ -17,7 +18,8 @@ class ValleyWellRepositoryImpl implements ValleyWellRepository {
 
   @override
   Future<List<ValleyWellModel>> getValleyWellQuestions() async {
-    List<ValleyWellModel> valleyWellModelList = await valleyWellDatabase.getAllValleyWellModel();
+    List<ValleyWellModel> valleyWellModelList =
+        await valleyWellDatabase.getAllValleyWellModel();
 
     if (valleyWellModelList.isEmpty) {
       for (var valleyWellModel in AppUtils.instance.questionAnswerModelList) {
@@ -36,14 +38,16 @@ class ValleyWellRepositoryImpl implements ValleyWellRepository {
     int index,
     ValleyWellModel valleyWellModel,
   ) async {
-    final ResponseModel<String> responseModel = await geminiApiService.callGeminiApi(
+    final ResponseModel<String> responseModel =
+        await geminiApiService.callGeminiApi(
       valleyWellModel.question,
     );
     if (responseModel.responseStatus == ResponseStatus.success) {
       ValleyWellModel valleyWellModelWithAnswer = valleyWellModel.copyWith(
         questionAnswer: responseModel.response,
       );
-      AppUtils.instance.questionAnswerModelList[index] = valleyWellModelWithAnswer;
+      AppUtils.instance.questionAnswerModelList[index] =
+          valleyWellModelWithAnswer;
       await valleyWellDatabase.deleteAllValleyWellModel();
       for (var valleyWellModel in AppUtils.instance.questionAnswerModelList) {
         await valleyWellDatabase.saveValleyWellModel(
@@ -51,6 +55,17 @@ class ValleyWellRepositoryImpl implements ValleyWellRepository {
         );
       }
     }
+    return responseModel;
+  }
+
+  @override
+  Future<ResponseModel<String>> getValleyWellCustomAnswer(
+      ValleyWellModel valleyWellModel) async {
+    final ResponseModel<String> responseModel = await geminiApiService
+        .callGeminiApi(valleyWellModel.question, isCustomQuestion: true);
+
+    logger.i(responseModel.response);
+
     return responseModel;
   }
 }

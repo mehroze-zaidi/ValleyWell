@@ -1,60 +1,59 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:valley_well/data/models/response_model.dart';
 import 'package:valley_well/data/models/valley_well_model.dart';
 import 'package:valley_well/domain/repository/valley_well_repository.dart';
 import 'package:valley_well/utils/constants/app_strings.dart';
 import 'package:valley_well/utils/enums/response_status.dart';
 
-part 'details_screen_state.dart';
+part 'custom_question_screen_state.dart';
+part 'custom_question_screen_cubit.freezed.dart';
 
-class DetailsScreenCubit extends Cubit<DetailsScreenState> {
-  DetailsScreenCubit(
-    this.valleyWellRepository,
-  ) : super(DetailsScreenInitial());
-
+class CustomQuestionScreenCubit extends Cubit<CustomQuestionScreenState> {
+  CustomQuestionScreenCubit(  this.valleyWellRepository) : super(const CustomQuestionScreenState.initial());
+String searchText="";
   final ValleyWellRepository valleyWellRepository;
+  void getCustomQuestionAnswer(
 
-  void handleValleyWellQuestions(
-    int index,
-    ValleyWellModel valleyWellModel,
-  ) async {
-    emit(DetailsScreenGetQuestionAnswerLoading());
+      ValleyWellModel valleyWellModel,
+      ) async {
+    emit(const _Loading());
     try {
-      final ResponseModel responseModel = await valleyWellRepository.handleValleyWellQuestions(
-        index,
+      final ResponseModel responseModel = await valleyWellRepository.getValleyWellCustomAnswer(
+
         valleyWellModel,
       );
       debugPrint(responseModel.responseStatus.toString());
       debugPrint(responseModel.response.toString());
       if (responseModel.responseStatus == ResponseStatus.success) {
         emit(
-          DetailsScreenGetQuestionAnswerSuccess(
+          _Loaded(
             responseModel.response,
           ),
         );
       } else if (responseModel.responseStatus == ResponseStatus.failedToConnectToServer) {
         emit(
-          DetailsScreenGetQuestionAnswerConnectionError(
+          const _Error(
             AppStrings.failedToConnectToServer,
           ),
         );
       } else if (responseModel.responseStatus == ResponseStatus.noInternetConnection) {
         emit(
-          DetailsScreenGetQuestionAnswerConnectionError(
+          const _Error(
             AppStrings.noInternetConnection,
           ),
         );
       } else {
         emit(
-          DetailsScreenGetQuestionAnswerError(
+          const _Error(
             AppStrings.unknownError,
           ),
         );
       }
     } catch (e) {
       emit(
-        DetailsScreenGetQuestionAnswerError(
+        _Error(
           e.toString(),
         ),
       );
